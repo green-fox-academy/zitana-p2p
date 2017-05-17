@@ -18,7 +18,7 @@ public class Log {
   public Log(String method, String path, String requestData) {
     this.time = new Date();
     this.level = System.getenv("CHAT_APP_LOGLEVEL");
-      this.method = method;
+    this.method = method;
     this.path = path;
     this.requestData = requestData;
   }
@@ -29,7 +29,7 @@ public class Log {
     return format.format(time) +
         " " + level +
         " " + method +
-        " '" + path +
-        ", text='" + requestData;
+        " Request " + path +
+        " text=" + requestData;
   }
 }
