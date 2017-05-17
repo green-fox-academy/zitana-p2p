@@ -25,9 +25,9 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('com.h2database:h2')
-//	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
 	runtime('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
