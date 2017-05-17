@@ -1,6 +1,7 @@
 package com.greenfox.model;
 
-import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,24 +9,24 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 public class Log {
-  @DateTimeFormat
-  Time time;
+  Date time;
   String level;
   String method;
   String path;
   String requestData;
 
-  public Log(Time time, String level, String method, String path, String requestData) {
-    this.time = time;
+  public Log(String method, String path, String requestData) {
+    this.time = new Date();
     this.level = System.getenv("CHAT_APP_LOGLEVEL");
-    this.method = method;
+      this.method = method;
     this.path = path;
     this.requestData = requestData;
   }
 
   @Override
   public String toString() {
-    return time +
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss ");
+    return format.format(time) +
         " " + level +
         " " + method +
         " '" + path +

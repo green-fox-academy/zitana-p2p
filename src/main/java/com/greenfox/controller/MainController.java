@@ -1,5 +1,6 @@
 package com.greenfox.controller;
 
+import com.greenfox.model.Log;
 import com.greenfox.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ public class MainController {
 
   @RequestMapping("/")
   public String main() {
+    Log log = new Log("GET", "/", "main page");
+    System.out.println(log);
     return "main";
   }
 
