@@ -27,8 +27,8 @@ public class MainController {
     return "enter";
   }
 
-  @RequestMapping("/create")
-  public String create(@RequestParam("username") String username) {
+  @RequestMapping("/enter/add")
+  public String create(@RequestParam(value = "username", required = true) String username) {
     userRepository.save(new User(username));
     return "redirect:/";
   }
