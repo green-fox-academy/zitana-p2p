@@ -20,9 +20,4 @@ public class MainController {
     return "main";
   }
 
-  @RequestMapping(value = "/")
-  public String log(Model model){
-    System.out.println(System.getenv("CHAT_APP_LOGLEVEL"));
-    return "main";
-  }
 }
