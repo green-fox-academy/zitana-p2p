@@ -1,0 +1,16 @@
+out
+*class
+.idea
+*.iml
+*.xml
+*.jar
+
+#Gradle
+.gradle
+/build/
+.gradletasknamecache
+.bin/
+gradle-app.setting
+!gradle-wrapper.jar
+*.bat
+*.gradle
