@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class MainController {
 
-  @Autowired
-  UserRepository userRepository;
+//  @Autowired
+//  UserRepository userRepository;
 
 
   @RequestMapping("/")
