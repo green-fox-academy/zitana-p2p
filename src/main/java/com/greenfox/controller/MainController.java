@@ -47,4 +47,12 @@ public class MainController {
     return "redirect:/";
   }
 
+  @RequestMapping("/updateUsername")
+  public String update(@RequestParam(value = "username") String username, Model model) {
+    System.out.println(new Log("POST", "/updateUsername ", "new username=" + username));
+    userRepository.findOne(1l).setUsername(username);
+    System.out.println(userRepository.findOne(1l));
+    return "redirect:/";
+  }
+
 }
