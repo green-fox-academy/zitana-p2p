@@ -5,6 +5,7 @@ import com.greenfox.model.User;
 import com.greenfox.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,20 +16,25 @@ public class MainController {
   UserRepository userRepository;
 
 
-  @RequestMapping("/")
+  @GetMapping("/")
   public String main() {
-    Log log = new Log("GET", "/", "main page");
-    System.out.println(log);
-    return "main";
+    if (userRepository.count() == 0) {
+      return "redirect:/enter";
+    } else {
+      System.out.println(new Log("GET", "/", "main page"));
+      return "main";
+    }
   }
 
-  @RequestMapping("/enter")
+  @GetMapping("/enter")
   public String enter() {
+    System.out.println(new Log("GET", "/enter", ""));
     return "enter";
   }
 
   @RequestMapping("/enter/add")
-  public String create(@RequestParam(value = "username", required = true) String username) {
+  public String create(@RequestParam(value = "username") String username) {
+    System.out.println(new Log("POST", "/enter/add ", "username=" + username));
     userRepository.save(new User(username));
     return "redirect:/";
   }

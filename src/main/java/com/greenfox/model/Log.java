@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
@@ -28,8 +27,8 @@ public class Log {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss ");
     return format.format(time) +
         " " + level +
-        " " + method +
         " Request " + path +
-        " text=" + requestData;
+        " " + method +
+        " " + requestData;
   }
 }
