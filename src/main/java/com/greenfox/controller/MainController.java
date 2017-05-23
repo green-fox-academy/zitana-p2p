@@ -1,7 +1,9 @@
 package com.greenfox.controller;
 
 import com.greenfox.model.Log;
+import com.greenfox.model.Message;
 import com.greenfox.model.User;
+import com.greenfox.repository.MessageRepository;
 import com.greenfox.repository.UserRepository;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,14 @@ public class MainController {
 
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  MessageRepository messageRepository;
 
 
   @GetMapping("/")
   public String main(HttpServletRequest request,Model model) {
     model.addAttribute("user", userRepository.findOne(1l));
+    model.addAttribute("messages", messageRepository.findAll());
     if (userRepository.count() == 0) {
       return "redirect:/enter";
     } else {
@@ -55,4 +60,12 @@ public class MainController {
     userRepository.save(userRepository.findOne(1l));
     return "redirect:/";
   }
+
+  @RequestMapping("/send")
+  public String send(HttpServletRequest request, @RequestParam(value = "message") String message, Model model) {
+    System.out.println(new Log(request.getMethod(), request.getRequestURI(), "new message=" + message));
+    messageRepository.save(new Message(message, userRepository.findOne(1l).getUsername()));
+    return "redirect:/";
+  }
+
 }

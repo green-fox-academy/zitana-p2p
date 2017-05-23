@@ -1,5 +1,7 @@
 package com.greenfox.model;
 
+import java.sql.Timestamp;
+import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +16,23 @@ import lombok.Setter;
 @Setter
 public class Message {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
-
+  private int id;
   private String message;
+  private String username;
+  private Timestamp time;
 
+  public Message() {
+  }
+
+  public Message(String message, String username) {
+    this.message = message;
+    this.username = username;
+    this.id = generateId();
+    this.time = new Timestamp(System.currentTimeMillis());
+  }
+
+  private int generateId() {
+    Random rand = new Random();
+    return rand.nextInt(9000000) + 1000000;
+  }
 }
