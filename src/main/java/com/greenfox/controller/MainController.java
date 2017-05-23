@@ -24,7 +24,7 @@ public class MainController {
     if (userRepository.count() == 0) {
       return "redirect:/enter";
     } else {
-      System.out.println(new Log(request.getMethod(), request.getRequestURI(), "")));
+      System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
       return "main";
     }
   }
