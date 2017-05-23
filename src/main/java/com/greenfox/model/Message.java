@@ -17,18 +17,18 @@ import lombok.Setter;
 public class Message {
   @Id
   private int id;
-  private String message;
+  private String text;
   private String username;
-  private Timestamp time;
+  private Timestamp timestamp;
 
   public Message() {
   }
 
-  public Message(String message, String username) {
-    this.message = message;
+  public Message(String text, String username) {
+    this.text = text;
     this.username = username;
     this.id = generateId();
-    this.time = new Timestamp(System.currentTimeMillis());
+    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
   private int generateId() {

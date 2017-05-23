@@ -25,7 +25,7 @@ public class MainController {
   @GetMapping("/")
   public String main(HttpServletRequest request,Model model) {
     model.addAttribute("user", userRepository.findOne(1l));
-    model.addAttribute("messages", messageRepository.findAll());
+    model.addAttribute("messages", messageRepository.findAllByOrderByTimestampAsc());
     if (userRepository.count() == 0) {
       return "redirect:/enter";
     } else {
@@ -38,6 +38,7 @@ public class MainController {
   public String enter(HttpServletRequest request, Model model) {
     if (userRepository.count() == 0) {
       System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
+      messageRepository.save(new Message(" Hi there! Submit your message using the send button!", "App"));
       return "enter";
     } else {
       System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
