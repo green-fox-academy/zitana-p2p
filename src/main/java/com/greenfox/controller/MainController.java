@@ -1,7 +1,10 @@
 package com.greenfox.controller;
 
+import com.greenfox.model.Client;
 import com.greenfox.model.Log;
 import com.greenfox.model.Message;
+import com.greenfox.model.Receive;
+import com.greenfox.model.Response;
 import com.greenfox.model.User;
 import com.greenfox.repository.MessageRepository;
 import com.greenfox.repository.UserRepository;
@@ -12,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class MainController {
@@ -65,7 +69,10 @@ public class MainController {
   @RequestMapping("/send")
   public String send(HttpServletRequest request, @RequestParam(value = "message") String message, Model model) {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "new message=" + message));
-    messageRepository.save(new Message(message, userRepository.findOne(1l).getUsername()));
+    Message clientMessage = new Message(message, userRepository.findOne(1l).getUsername());
+    messageRepository.save(clientMessage);
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive", new Receive(clientMessage, new Client(System.getenv("CHAT_APP_UNIQUE_ID"))), Response.class);
     return "redirect:/";
   }
 

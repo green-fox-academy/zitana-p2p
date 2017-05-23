@@ -11,4 +11,9 @@ public class Receive {
 
   public Receive() {
   }
+
+  public Receive(Message message, Client client) {
+    this.message = message;
+    this.client = client;
+  }
 }

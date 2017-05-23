@@ -20,4 +20,7 @@ public class Response {
   public Response(String status) {
     this.status = status;
   }
+
+  public Response() {
+  }
 }
