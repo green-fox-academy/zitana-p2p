@@ -19,8 +19,7 @@
     </li>
   </ul>
   <form method="post" th:action="@{/send}">
-    <textarea name="textarea" rows="4" cols="15"></textarea>
-    <input type="text" th:name="message"/>
+    <textarea type="text" th:name="message" rows="4" cols="30"></textarea>
     <button type="submit" value="message">Send</button>
   </form>
 </body>

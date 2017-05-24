@@ -1,18 +1,17 @@
 package com.greenfox.model;
 
-import static com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion.NON_NULL;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.sun.istack.internal.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@JsonSerialize(include= NON_NULL)
 public class Response {
   private String status;
-  @JsonSerialize(include= NON_NULL)
+  @JsonInclude(Include.NON_NULL)
   @Nullable
   private String message;
 
