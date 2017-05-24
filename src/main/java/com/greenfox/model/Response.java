@@ -1,6 +1,5 @@
 package com.greenfox.model;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.sun.istack.internal.Nullable;
@@ -12,7 +11,6 @@ import lombok.Setter;
 public class Response {
   private String status;
   @JsonInclude(Include.NON_NULL)
-  @Nullable
   private String message;
 
   public Response(String status, String message) {
