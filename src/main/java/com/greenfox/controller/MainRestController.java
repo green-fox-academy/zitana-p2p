@@ -26,7 +26,7 @@ public class MainRestController {
   @CrossOrigin("*")
   public Response receive(HttpServletRequest request, @RequestBody Receive receive) {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "received message=" + receive));
-    if (receive.getClient().getId() != "zitana") {
+    if (receive.getClient().getId() != System.getenv("CHAT_APP_UNIQUE_ID")) {
       RestTemplate restTemplate = new RestTemplate();
       restTemplate
           .postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive", receive,
