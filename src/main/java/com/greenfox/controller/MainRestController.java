@@ -27,11 +27,11 @@ public class MainRestController {
   public Response receive(HttpServletRequest request, @RequestBody Receive receive) {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "received message=" + receive));
     if (!receive.getClient().getId().equals(System.getenv("CHAT_APP_UNIQUE_ID"))) {
+      messageRepository.save(receive.getMessage());
       RestTemplate restTemplate = new RestTemplate();
       restTemplate
           .postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive", receive,
               Response.class);
-      messageRepository.save(receive.getMessage());
     }
     return messageValidator.validate(receive);
   }
