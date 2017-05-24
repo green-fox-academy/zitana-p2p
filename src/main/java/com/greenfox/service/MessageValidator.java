@@ -13,18 +13,7 @@ public class MessageValidator {
   }
 
   public Response validate(Receive receive) {
-    List<String> missing = new ArrayList<>();
-    if (receive.getMessage().getId() == 0) {
-      missing.add("message.id");
-    } else if (receive.getMessage().getTimestamp().equals(null)) {
-      missing.add("message.timestamp");
-    } else if (receive.getMessage().getText().isEmpty() || receive.getMessage().getText() == null) {
-      missing.add("message.text");
-    } else if (receive.getMessage().getUsername().isEmpty() || receive.getMessage().getUsername() == null) {
-      missing.add("message.username");
-    } else if (receive.getClient().getId().isEmpty() || receive.getClient().getId() == null) {
-      missing.add("client.id");
-    }
+    List<String> missing = findMissingParams(receive);
 
     if (missing.size() == 0) {
       return new Response("ok");
@@ -35,6 +24,37 @@ public class MessageValidator {
       }
       return new Response("error", errorMessage);
     }
+  }
+
+  private List<String> findMissingParams(Receive receive) {
+    List<String> missing = new ArrayList<>();
+
+    if (receive.getMessage().getText() == null) {
+      missing.add("message.text");
+    } else if (receive.getMessage().getText().isEmpty()) {
+      missing.add("message.text");
+    }
+
+    if (receive.getMessage().getUsername() == null) {
+      missing.add("message.username");
+    } else if (receive.getMessage().getUsername().isEmpty()) {
+      missing.add("message.username");
+    }
+
+    if (receive.getClient().getId() == null) {
+      missing.add("client.id");
+    } else if (receive.getClient().getId().isEmpty()) {
+      missing.add("client.id");
+    }
+
+    if (receive.getMessage().getId() == 0) {
+      missing.add("message.id");
+    }
+    if (receive.getMessage().getTimestamp().equals(null)) {
+      missing.add("message.timestamp");
+    }
+
+    return missing;
   }
 
 }
