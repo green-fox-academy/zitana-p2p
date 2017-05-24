@@ -171,6 +171,7 @@ public class MainRestControllerTest {
     message.setUsername("EggDice");
     message.setId(7655482);
     message.setTimestamp(new Timestamp(1322018752992l));
+    message.setText("How you doin'?");
     Client client = new Client(("EggDice"));
     Receive receivedMessage = new Receive(message,client);
     ObjectMapper mapper = new ObjectMapper();
@@ -181,8 +182,7 @@ public class MainRestControllerTest {
         .content(jsonInput))
         .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
-        .andExpect(jsonPath("$.status", is("error")))
-        .andExpect(jsonPath("$.message", containsString("message.username")));
+        .andExpect(jsonPath("$.status", is("ok")));
   }
 
   @Test
@@ -191,7 +191,7 @@ public class MainRestControllerTest {
     message.setUsername(null);
     message.setId(7655482);
     message.setTimestamp(new Timestamp(1322018752992l));
-    message.setText(null);
+    message.setText("How you doin'?");
     Client client = new Client(("EggDice"));
     Receive receivedMessage = new Receive(message,client);
     ObjectMapper mapper = new ObjectMapper();
