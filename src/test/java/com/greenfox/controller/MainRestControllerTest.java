@@ -65,7 +65,7 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void withExampleJSON_OK() throws Exception {
+  public void withExample_Response_Status_OK() throws Exception {
     Message message = new Message("How you doin'?", "EggDice");
         message.setId(7655482);
         message.setTimestamp(new Timestamp(1322018752992l));
@@ -83,7 +83,7 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void with_Empty_String_As_Text() throws Exception {
+  public void with_Empty_String_As_Text_ERROR() throws Exception {
     Message message = new Message();
     message.setUsername("EggDice");
     message.setId(7655482);
@@ -104,7 +104,7 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void without_Text() throws Exception {
+  public void without_Text_ERROR() throws Exception {
     Message message = new Message();
     message.setUsername("EggDice");
     message.setId(7655482);
@@ -124,7 +124,7 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void with_Null_Text() throws Exception {
+  public void with_Null_Text_ERROR() throws Exception {
     Message message = new Message();
     message.setUsername("EggDice");
     message.setId(7655482);
@@ -145,7 +145,7 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void with_Empty_String_As_Username() throws Exception {
+  public void with_Empty_String_As_Username_ERROR() throws Exception {
     Message message = new Message();
     message.setUsername("");
     message.setId(7655482);
@@ -166,9 +166,8 @@ public class MainRestControllerTest {
   }
 
   @Test
-  public void without_Username() throws Exception {
+  public void without_Username_ERROR() throws Exception {
     Message message = new Message();
-    message.setUsername("EggDice");
     message.setId(7655482);
     message.setTimestamp(new Timestamp(1322018752992l));
     message.setText("How you doin'?");
@@ -182,11 +181,12 @@ public class MainRestControllerTest {
         .content(jsonInput))
         .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
-        .andExpect(jsonPath("$.status", is("ok")));
+        .andExpect(jsonPath("$.status", is("error")))
+        .andExpect(jsonPath("$.message", containsString("message.username")));
   }
 
   @Test
-  public void with_Null_Username() throws Exception {
+  public void with_Null_Username_ERROR() throws Exception {
     Message message = new Message();
     message.setUsername(null);
     message.setId(7655482);
@@ -203,7 +203,68 @@ public class MainRestControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
         .andExpect(jsonPath("$.status", is("error")))
-        .andExpect(jsonPath("$.message", containsString("message.username")));
+        .andExpect(jsonPath("$.message", is("Missing field(s): message.username ")));
+  }
+
+  @Test
+  public void without_Username_And_Timestamp_ERROR() throws Exception {
+    Message message = new Message();
+    message.setId(7655482);
+    message.setText("How you doin'?");
+    Client client = new Client(("EggDice"));
+    Receive receivedMessage = new Receive(message,client);
+    ObjectMapper mapper = new ObjectMapper();
+    String jsonInput = mapper.writeValueAsString(receivedMessage);
+
+    mockMvc.perform(post("/api/message/receive")
+        .contentType(contentType)
+        .content(jsonInput))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.status", is("error")))
+        .andExpect(jsonPath("$.message", containsString("message.username")))
+        .andExpect(jsonPath("$.message", containsString("message.timestamp")));
+  }
+
+  @Test
+  public void without_message_ID_ERROR() throws Exception {
+    Message message = new Message();
+    message.setUsername("EggDice");
+    message.setTimestamp(new Timestamp(1322018752992l));
+    message.setText("How you doin'?");
+    Client client = new Client(("EggDice"));
+    Receive receivedMessage = new Receive(message,client);
+    ObjectMapper mapper = new ObjectMapper();
+    String jsonInput = mapper.writeValueAsString(receivedMessage);
+
+    mockMvc.perform(post("/api/message/receive")
+        .contentType(contentType)
+        .content(jsonInput))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.status", is("error")))
+        .andExpect(jsonPath("$.message", containsString("message.id")));
+  }
+
+  @Test
+  public void client_ID_Null_ERROR() throws Exception {
+    Message message = new Message();
+    message.setId(7655482);
+    message.setUsername("EggDice");
+    message.setTimestamp(new Timestamp(1322018752992l));
+    message.setText("How you doin'?");
+    Client client = new Client((null));
+    Receive receivedMessage = new Receive(message,client);
+    ObjectMapper mapper = new ObjectMapper();
+    String jsonInput = mapper.writeValueAsString(receivedMessage);
+
+    mockMvc.perform(post("/api/message/receive")
+        .contentType(contentType)
+        .content(jsonInput))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(contentType))
+        .andExpect(jsonPath("$.status", is("error")))
+        .andExpect(jsonPath("$.message", containsString("client.id")));
   }
 
 }

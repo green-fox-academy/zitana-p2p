@@ -17,21 +17,25 @@ import org.springframework.web.client.RestTemplate;
 public class MainRestController {
 
   @Autowired
-  MessageValidator messageValidator;
+  private MessageValidator messageValidator;
 
   @Autowired
-  MessageRepository messageRepository;
+  private MessageRepository messageRepository;
 
   @RequestMapping("/api/message/receive")
   @CrossOrigin("*")
   public Response receive(HttpServletRequest request, @RequestBody Receive receive) {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "received message=" + receive));
-    if (!receive.getClient().getId().equals(System.getenv("CHAT_APP_UNIQUE_ID"))) {
-      messageRepository.save(receive.getMessage());
-      RestTemplate restTemplate = new RestTemplate();
-      restTemplate
-          .postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive", receive,
-              Response.class);
+    try {
+      if (!receive.getClient().getId().equals(System.getenv("CHAT_APP_UNIQUE_ID"))) {
+        messageRepository.save(receive.getMessage());
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate
+            .postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive", receive,
+                Response.class);
+      }
+    } catch (NullPointerException e) {
+      System.err.println(e.fillInStackTrace().toString());
     }
     return messageValidator.validate(receive);
   }

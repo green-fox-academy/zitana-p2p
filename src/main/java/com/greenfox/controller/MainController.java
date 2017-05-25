@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -21,27 +22,23 @@ import org.springframework.web.client.RestTemplate;
 public class MainController {
 
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
   @Autowired
-  MessageRepository messageRepository;
+  private MessageRepository messageRepository;
 
   @GetMapping("/")
   public String main(HttpServletRequest request, Model model) {
     model.addAttribute("user", userRepository.findOne(1l));
     model.addAttribute("messages", messageRepository.findAllByOrderByTimestampAsc());
-    if (userRepository.count() == 0) {
-      return "redirect:/enter";
-    } else {
-      System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
-      return "main";
-    }
+    System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
+    return userRepository.count() != 0 ? "main" : "redirect:/enter";
   }
 
   @GetMapping("/enter")
   public String enter(HttpServletRequest request) {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), ""));
     if (userRepository.count() == 0) {
-      messageRepository.save(new Message(" Hi there! Submit your message using the send button!", "App"));
+      messageRepository.save(new Message("Hi there! Submit your message using the send button!", "App"));
       return "enter";
     } else {
       return "redirect:/";
@@ -69,10 +66,10 @@ public class MainController {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "new message=" + message));
     Message clientMessage = new Message(message, userRepository.findOne(1l).getUsername());
     messageRepository.save(clientMessage);
-    RestTemplate restTemplate = new RestTemplate();
-    restTemplate.postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive",
-        new Receive(clientMessage, new Client(System.getenv("CHAT_APP_UNIQUE_ID"))),
-        Response.class);
+//    RestTemplate restTemplate = new RestTemplate();
+//    restTemplate.postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive",
+//        new Receive(clientMessage, new Client(System.getenv("CHAT_APP_UNIQUE_ID"))),
+//        Response.class);
     return "redirect:/";
   }
 

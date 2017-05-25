@@ -17,7 +17,7 @@ public class MessageValidator {
     return buildResponse(missingParameters);
   }
 
-  private List<String> findMissingParams(Receive receive) {
+  public List<String> findMissingParams(Receive receive) {
     List<String> missing = new ArrayList<>();
 
     if (receive.getMessage().getText() == null) {
@@ -41,14 +41,15 @@ public class MessageValidator {
     if (receive.getMessage().getId() == 0) {
       missing.add("message.id");
     }
-    if (receive.getMessage().getTimestamp().equals(null)) {
+
+    if (receive.getMessage().getTimestamp() == null) {
       missing.add("message.timestamp");
     }
 
     return missing;
   }
 
-  private Response buildResponse(List<String> missingParameters) {
+  public Response buildResponse(List<String> missingParameters) {
     if (missingParameters.size() == 0) {
       return new Response("ok");
     } else {
