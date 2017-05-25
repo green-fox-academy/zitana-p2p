@@ -66,10 +66,10 @@ public class MainController {
     System.out.println(new Log(request.getMethod(), request.getRequestURI(), "new message=" + message));
     Message clientMessage = new Message(message, userRepository.findOne(1l).getUsername());
     messageRepository.save(clientMessage);
-//    RestTemplate restTemplate = new RestTemplate();
-//    restTemplate.postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive",
-//        new Receive(clientMessage, new Client(System.getenv("CHAT_APP_UNIQUE_ID"))),
-//        Response.class);
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.postForObject(System.getenv("CHAT_APP_PEER_ADDRESS") + "/api/message/receive",
+        new Receive(clientMessage, new Client(System.getenv("CHAT_APP_UNIQUE_ID"))),
+        Response.class);
     return "redirect:/";
   }
 
