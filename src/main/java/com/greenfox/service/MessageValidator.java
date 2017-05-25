@@ -13,17 +13,8 @@ public class MessageValidator {
   }
 
   public Response validate(Receive receive) {
-    List<String> missing = findMissingParams(receive);
-
-    if (missing.size() == 0) {
-      return new Response("ok");
-    } else {
-      String errorMessage = "Missing field(s): ";
-      for (String error : missing) {
-        errorMessage += error + " ";
-      }
-      return new Response("error", errorMessage);
-    }
+    List<String> missingParameters = findMissingParams(receive);
+    return buildResponse(missingParameters);
   }
 
   private List<String> findMissingParams(Receive receive) {
@@ -57,4 +48,15 @@ public class MessageValidator {
     return missing;
   }
 
+  private Response buildResponse(List<String> missingParameters) {
+    if (missingParameters.size() == 0) {
+      return new Response("ok");
+    } else {
+      String errorMessage = "Missing field(s): ";
+      for (String error : missingParameters) {
+        errorMessage += error + " ";
+      }
+      return new Response("error", errorMessage);
+    }
+  }
 }
